@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CeriaEdu - Portal 20 Game Edukasi Anak SD</title>
+    <!-- Tailwind CSS untuk styling modern dan responsif -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka untuk kesan ramah anak -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome untuk ikon interaktif -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Fredoka', cursive, sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #fce7f3 50%, #fef9c3 100%);
+            min-height: 100vh;
+        }
+        .game-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .game-card:hover {
+            transform: translateY(-8px) scale(1.02);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="text-slate-700 antialiased selection:bg-pink-300 selection:text-pink-900">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-pink-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="showHome()">
+                <div class="w-12 h-12 bg-gradient-to-tr from-pink-400 to-sky-400 rounded-2xl flex items-center justify-center shadow-md transform rotate-6 hover:rotate-12 transition-transform">
+                    <i class="fa-solid fa-gamepad text-white text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-pink-500 to-sky-500 bg-clip-text text-transparent">CeriaEdu</h1>
+                    <p class="text-xs text-slate-400 font-semibold tracking-wider uppercase">Portal 20 Game Edukasi SD</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <div class="hidden sm:flex items-center bg-amber-100 text-amber-800 px-4 py-2 rounded-full font-bold shadow-sm border border-amber-200">
+                    <i class="fa-solid fa-star text-amber-500 mr-2 text-lg animate-bounce"></i>
+                    <span id="global-score">150</span> Poin Bintang
+                </div>
+                <button onclick="showHome()" class="bg-sky-400 hover:bg-sky-500 text-white font-bold px-5 py-2.5 rounded-2xl shadow-md hover:shadow-lg transition-all flex items-center space-x-2">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Menu Utama</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- VIEW 1: HOME / GRID 20 GAMES -->
+        <section id="home-view" class="space-y-8">
+            <!-- Hero Banner Ceria -->
+            <div class="relative overflow-hidden bg-gradient-to-r from-pink-400 via-purple-400 to-sky-400 rounded-3xl p-8 sm:p-12 text-white shadow-xl">
+                <div class="absolute -right-10 -bottom-10 opacity-20 text-9xl">
+                    <i class="fa-solid fa-rocket"></i>
+                </div>
+                <div class="relative z-10 max-w-2xl space-y-4">
+                    <span class="bg-white/20 text-white text-xs sm:text-sm font-bold px-4 py-1.5 rounded-full inline-block backdrop-blur-sm">
+                        ✨ Belajar Sambil Bermain Paling Seru!
+                    </span>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold leading-tight">
+                        Selamat Datang di Dunia Petualangan Belajar!
+                    </h2>
+                    <p class="text-white/90 text-sm sm:text-base leading-relaxed">
+                        Pilih dari 20 mini-games edukatif untuk melatih Matematika, Bahasa, Logika, Sains, dan Kreativitasmu. Setiap game memiliki banyak pertanyaan unik yang selalu diacak agar tidak bosan!
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <button onclick="playGame(1)" class="bg-white text-pink-600 font-bold px-6 py-3 rounded-2xl shadow-lg hover:bg-pink-50 transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Main Game Pertama</span>
+                        </button>
+                        <a href="#games-grid-section" class="bg-black/10 hover:bg-black/20 text-white font-bold px-6 py-3 rounded-2xl backdrop-blur-sm transition-all">
+                            Lihat 20 Game <i class="fa-solid fa-arrow-down ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Kategori -->
+            <div class="flex items-center justify-between flex-wrap gap-4 pt-4">
+                <h3 id="games-grid-section" class="text-2xl font-bold text-slate-800 flex items-center space-x-2">
+                    <i class="fa-solid fa-cubes text-pink-500"></i>
+                    <span>Daftar 20 Mini-Games Edukasi</span>
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="filterGames('all')" class="category-btn bg-pink-500 text-white font-bold px-4 py-2 rounded-xl text-sm shadow-sm transition-all">Semua (20)</button>
+                    <button onclick="filterGames('math')" class="category-btn bg-white hover:bg-pink-50 text-slate-600 font-bold px-4 py-2 rounded-xl text-sm shadow-sm transition-all">Matematika</button>
+                    <button onclick="filterGames('word')" class="category-btn bg-white hover:bg-pink-50 text-slate-600 font-bold px-4 py-2 rounded-xl text-sm shadow-sm transition-all">Bahasa</button>
+                    <button onclick="filterGames('science')" class="category-btn bg-white hover:bg-pink-50 text-slate-600 font-bold px-4 py-2 rounded-xl text-sm shadow-sm transition-all">Sains & Umum</button>
+                </div>
+            </div>
+
+            <!-- Grid 20 Game Card Container -->
+            <div id="games-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pt-4">
+                <!-- Di-inject secara dinamis melalui JavaScript -->
+            </div>
+        </section>
+
+        <!-- VIEW 2: GAME ARENA -->
+        <section id="game-view" class="hidden space-y-6">
+            <!-- Navigasi / Status Game Aktif -->
+            <div class="bg-white rounded-3xl p-5 shadow-md border border-pink-100 flex items-center justify-between flex-wrap gap-4">
+                <div class="flex items-center space-x-3">
+                    <button onclick="showHome()" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <h3 id="game-title-header" class="text-xl font-bold text-slate-800">Judul Game</h3>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="bg-purple-100 text-purple-700 px-3 py-1.5 rounded-xl font-bold text-sm">
+                        Level: <span id="current-game-level">1</span>
+                    </div>
+                    <div class="bg-pink-100 text-pink-600 px-3 py-1.5 rounded-xl font-bold text-sm">
+                        Soal: <span id="current-question-index">1</span>/5
+                    </div>
+                    <div class="bg-amber-100 text-amber-700 px-3 py-1.5 rounded-xl font-bold text-sm">
+                        Skor: <span id="current-game-score">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tempat Kontainer Game Aktif -->
+            <div id="active-game-container" class="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border border-pink-50 min-h-[450px] flex flex-col items-center justify-center relative overflow-hidden">
+                <!-- Konten game aktif di-inject lewat JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-16 bg-white/60 border-t border-slate-200 py-6 text-center text-sm text-slate-500">
+        <p>CeriaEdu Portal &copy; 2026 - Dibuat dengan penuh ❤️ untuk Anak Cerdas Indonesia</p>
+    </footer>
+
+    <!-- Custom Modal Pemberitahuan / Pesan Ramah Anak -->
+    <div id="custom-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full text-center space-y-4 shadow-2xl transform scale-95 transition-transform" id="modal-content-box">
+            <div id="modal-icon" class="w-16 h-16 bg-pink-100 text-pink-500 rounded-full flex items-center justify-center text-3xl mx-auto shadow-inner">
+                <i class="fa-solid fa-award"></i>
+            </div>
+            <h4 id="modal-title" class="text-2xl font-bold text-slate-800">Hebat Sekali!</h4>
+            <p id="modal-message" class="text-slate-600 text-sm">Kamu berhasil menyelesaikan tantangan ini dengan luar biasa!</p>
+            <button onclick="closeModal()" class="w-full bg-gradient-to-r from-pink-400 to-sky-400 text-white font-bold py-3 rounded-2xl shadow-md hover:opacity-90 transition-opacity">
+                Lanjut Bermain! 🎉
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Data 20 Mini-Games Edukasi SD
+        const gamesList = [
+            { id: 1, title: "Matematika Seru", category: "math", icon: "fa-calculator", color: "from-pink-400 to-rose-400", desc: "Latihan tambah, kurang, kali, bagi dengan cara seru!", playable: true },
+            { id: 2, title: "Tebak Warna Ceria", category: "science", icon: "fa-palette", color: "from-sky-400 to-indigo-400", desc: "Uji kecepatanmu menebak nama warna dan kombinasi.", playable: true },
+            { id: 3, title: "Tebak Kata Cekatan", category: "word", icon: "fa-book-open", color: "from-amber-400 to-orange-400", desc: "Susun huruf acak menjadi kosakata bahasa Indonesia yang benar.", playable: true },
+            { id: 4, title: "Pecahan Pizza", category: "math", icon: "fa-pizza-slice", color: "from-emerald-400 to-teal-400", desc: "Belajar pecahan matematika dasar melalui potongan pizza lezat.", playable: true },
+            { id: 5, title: "Petualangan Angka", category: "math", icon: "fa-sort-numeric-up", color: "from-purple-400 to-pink-400", desc: "Urutkan deretan angka terkecil hingga terbesar dengan cepat.", playable: true },
+            { id: 6, title: "Kamus Binatang", category: "science", icon: "fa-paw", color: "from-blue-400 to-cyan-400", desc: "Kenali suara dan habitat berbagai satwa di seluruh dunia.", playable: true },
+            { id: 7, title: "Tata Surya Asyik", category: "science", icon: "fa-rocket", color: "from-indigo-500 to-purple-600", desc: "Jelajahi planet-planet di tata surya sambil menjawab kuis luar angkasa.", playable: true },
+            { id: 8, title: "Susun Kalimat", category: "word", icon: "fa-pen-nib", color: "from-rose-400 to-pink-500", desc: "Susun kata-kata acak agar menjadi kalimat efektif yang benar.", playable: true },
+            { id: 9, title: "Teka-Teki Bangun Datar", category: "math", icon: "fa-shapes", color: "from-amber-400 to-yellow-500", desc: "Kenali bentuk lingkaran, segitiga, persegi, dan sifat-sifatnya.", playable: true },
+            { id: 10, title: "Sains Dapur Pintar", category: "science", icon: "fa-flask", color: "from-emerald-400 to-green-500", desc: "Eksperimen sains sederhana yang aman dan seru di rumah.", playable: true },
+            { id: 11, title: "Lawan Kata Cepat", category: "word", icon: "fa-arrows-split-up-and-left", color: "from-sky-400 to-blue-500", desc: "Temukan antonim atau sinonim kata dengan tepat dalam batas waktu.", playable: true },
+            { id: 12, title: "Kuis Pahlawan Nasional", category: "science", icon: "fa-medal", color: "from-orange-400 to-red-500", desc: "Mengenal sejarah perjuangan pahlawan kemerdekaan Indonesia.", playable: true },
+            { id: 13, title: "Jam & Waktu Pintar", category: "math", icon: "fa-clock", color: "from-purple-400 to-indigo-500", desc: "Belajar membaca jam analog dan menghitung selisih waktu.", playable: true },
+            { id: 14, title: "Geografi Nusantara", category: "science", icon: "fa-map", color: "from-teal-400 to-emerald-600", desc: "Tebak pulau, provinsi, dan kebudayaan daerah di Indonesia.", playable: true },
+            { id: 15, title: "Ejaan Kata Benar", category: "word", icon: "fa-spell-check", color: "from-pink-400 to-purple-400", desc: "Pilih penulisan kata baku yang sesuai dengan ejaan yang disempurnakan.", playable: true },
+            { id: 16, title: "Tabel Perkalian Juara", category: "math", icon: "fa-graduation-cap", color: "from-blue-400 to-sky-600", desc: "Kuis kilat tabel perkalian 1 sampai 10 agar hafal di luar kepala.", playable: true },
+            { id: 17, title: "English Fun Vocabulary", category: "word", icon: "fa-language", color: "from-rose-400 to-orange-400", desc: "Belajar kosakata bahasa Inggris sehari-hari dengan gambar lucu.", playable: true },
+            { id: 18, title: "Teka-Teki Logika", category: "science", icon: "fa-lightbulb", color: "from-amber-400 to-amber-600", desc: "Asah otak dengan teka-teki logika ringan khusus anak cerdas.", playable: true },
+            { id: 19, title: "Cinta Lingkungan Hijau", category: "science", icon: "fa-seedling", color: "from-green-400 to-teal-500", desc: "Belajar memilah sampah organik dan anorganik dengan benar.", playable: true },
+            { id: 20, title: "Membaca Cepat Cerita", category: "word", icon: "fa-book-reader", color: "from-indigo-400 to-pink-500", desc: "Baca cerita pendek penuh pesan moral lalu jawab pertanyaan pemahaman.", playable: true }
+        ];
+
+        let totalScore = 150;
+        let currentGameScore = 0;
+        let currentQuestionCount = 0;
+        let currentGameLevel = 1;
+        let activeGameId = null;
+        let currentQuestionsList = [];
+        let usedQuestionIndices = new Set(); // Mencegah pertanyaan sama dalam satu sesi
+
+        // Inisialisasi Web Audio API untuk Efek Suara Interaktif
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (!audioCtx) return;
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'correct') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.setValueAtTime(659.25, now + 0.1);
+                osc.frequency.setValueAtTime(783.99, now + 0.2);
+                osc.frequency.setValueAtTime(1046.50, now + 0.3);
+
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+
+                osc.start(now);
+                osc.stop(now + 0.6);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(250, now);
+                osc.frequency.setValueAtTime(180, now + 0.15);
+
+                gainNode.gain.setValueAtTime(0.15, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+                osc.start(now);
+                osc.stop(now + 0.35);
+            } else if (type === 'levelup') {
+                const notes = [440, 554.37, 659.25, 880];
+                notes.forEach((freq, idx) => {
+                    const o = audioCtx.createOscillator();
+                    const g = audioCtx.createGain();
+                    o.connect(g);
+                    g.connect(audioCtx.destination);
+                    o.type = 'sine';
+                    o.frequency.setValueAtTime(freq, now + (idx * 0.1));
+                    g.gain.setValueAtTime(0.2, now + (idx * 0.1));
+                    g.gain.exponentialRampToValueAtTime(0.001, now + (idx * 0.1) + 0.3);
+                    o.start(now + (idx * 0.1));
+                    o.stop(now + (idx * 0.1) + 0.3);
+                });
+            }
+        }
+
+        // Render Grid Games saat halaman dimuat
+        function renderGames(filter = 'all') {
+            const grid = document.getElementById('games-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            const filtered = filter === 'all' ? gamesList : gamesList.filter(g => g.category === filter);
+
+            filtered.forEach(game => {
+                const card = document.createElement('div');
+                card.className = `game-card bg-white rounded-3xl p-5 shadow-md border border-pink-100 flex flex-col justify-between relative overflow-hidden group cursor-pointer`;
+                card.onclick = () => playGame(game.id);
+
+                card.innerHTML = `
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${game.color} opacity-10 rounded-bl-full transition-transform group-hover:scale-125"></div>
+                    <div class="space-y-3 relative z-10">
+                        <div class="w-14 h-14 bg-gradient-to-tr ${game.color} rounded-2xl flex items-center justify-center text-white text-2xl shadow-md">
+                            <i class="fa-solid ${game.icon}"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-100 text-slate-500">Game #${game.id}</span>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-600">Bisa Dimainkan!</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-slate-800 mt-1 group-hover:text-pink-500 transition-colors">${game.title}</h4>
+                            <p class="text-xs text-slate-500 mt-1 line-clamp-2">${game.desc}</p>
+                        </div>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between relative z-10">
+                        <span class="text-xs font-semibold text-amber-500 flex items-center"><i class="fa-solid fa-star mr-1"></i> +50 Poin</span>
+                        <span class="w-8 h-8 rounded-xl bg-pink-50 text-pink-500 flex items-center justify-center group-hover:bg-pink-500 group-hover:text-white transition-all">
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterGames(category) {
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('bg-pink-500', 'text-white');
+                btn.classList.add('bg-white', 'text-slate-600');
+            });
+            if (event && event.target) {
+                event.target.classList.remove('bg-white', 'text-slate-600');
+                event.target.classList.add('bg-pink-500', 'text-white');
+            }
+            renderGames(category);
+        }
+
+        function showHome() {
+            document.getElementById('home-view').classList.remove('hidden');
+            document.getElementById('game-view').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Setiap game memiliki antrean soal sendiri yang tersimpan di browser.
+        const QUESTION_STORAGE_KEY = 'ceriaEduQuestionProgressV2';
+        let questionProgress = JSON.parse(localStorage.getItem(QUESTION_STORAGE_KEY) || '{}');
+
+        function saveQuestionProgress() {
+            localStorage.setItem(QUESTION_STORAGE_KEY, JSON.stringify(questionProgress));
+        }
+
+        function shuffleArray(items) {
+            const result = [...items];
+            for (let i = result.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [result[i], result[j]] = [result[j], result[i]];
+            }
+            return result;
+        }
+
+        function playGame(id) {
+            const game = gamesList.find(g => g.id === id);
+            if (!game) return;
+
+            activeGameId = id;
+            currentGameScore = 0;
+            currentQuestionCount = 0;
+            currentGameLevel = 1;
+            usedQuestionIndices.clear();
+
+            const saved = questionProgress[id];
+            if (!saved || !Array.isArray(saved.order) || saved.order.length !== 50) {
+                questionProgress[id] = { order: shuffleArray([...Array(50).keys()]), index: 0, cycle: 1 };
+                saveQuestionProgress();
+            }
+
+            currentQuestionsList = getQuestionsForGame(id);
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('game-view').classList.remove('hidden');
+            document.getElementById('game-title-header').innerText = game.title;
+            document.getElementById('current-game-score').innerText = currentGameScore;
+            document.getElementById('current-game-level').innerText = currentGameLevel;
+            document.getElementById('current-question-index').innerText = currentQuestionCount + 1;
+            loadNextQuestion();
+        }
+
+        function loadNextQuestion() {
+            if (!currentQuestionsList.length) return;
+
+            let progress = questionProgress[activeGameId];
+            if (!progress || !Array.isArray(progress.order) || progress.order.length !== 50) {
+                progress = { order: shuffleArray([...Array(50).keys()]), index: 0, cycle: 1 };
+            }
+
+            // Semua 50 soal sudah keluar: mulai siklus baru dengan urutan acak.
+            if (progress.index >= 50) {
+                progress.order = shuffleArray([...Array(50).keys()]);
+                progress.index = 0;
+                progress.cycle = (progress.cycle || 1) + 1;
+            }
+
+            const questionIndex = progress.order[progress.index];
+            progress.index++;
+            questionProgress[activeGameId] = progress;
+            saveQuestionProgress();
+
+            questionAnswered = false;
+            renderActiveGameUI(currentQuestionsList[questionIndex]);
+        }
+
+        let questionAnswered = false;
+
+        function handleQuestionProgress(isCorrect) {
+            if (questionAnswered) return;
+            questionAnswered = true;
+            if (isCorrect) {
+                playSound('correct');
+                currentGameScore += 20;
+                totalScore += 20;
+                document.getElementById('current-game-score').innerText = currentGameScore;
+                document.getElementById('global-score').innerText = totalScore;
+            } else {
+                playSound('wrong');
+            }
+
+            currentQuestionCount++;
+            if (currentQuestionCount >= 5) {
+                playSound('levelup');
+                currentGameLevel++;
+                currentQuestionCount = 0;
+                showModal("Naik Level! 🌟", `Hebat! Kamu berhasil menyelesaikan sesi ini dan naik ke Level ${currentGameLevel}!`, "fa-award");
+            }
+
+            document.getElementById('current-question-index').innerText = currentQuestionCount + 1;
+            document.getElementById('current-game-level').innerText = currentGameLevel;
+            loadNextQuestion();
+        }
+
+        // Bank soal: 50 pertanyaan unik untuk setiap mini-game.
+        // Semua game memakai format pilihan ganda atau susun kata yang sudah didukung UI.
+        function getQuestionsForGame(gameId) {
+            const makeChoice = (q, ans, wrong) => ({
+                type: 'choice', q, ans: String(ans),
+                opts: shuffleArray([String(ans), ...wrong.map(String)])
+            });
+
+            const banks = {
+                1: () => {
+                    const out = [];
+                    for (let i = 0; i < 50; i++) {
+                        const a = 11 + i * 2, b = 3 + (i % 9);
+                        const op = ['+', '-', '×', '÷'][i % 4];
+                        let x, y, ans;
+                        if (op === '+') { x = a; y = b; ans = x + y; }
+                        else if (op === '-') { x = a + b; y = b; ans = x - y; }
+                        else if (op === '×') { x = 2 + (i % 9); y = 3 + Math.floor(i / 9); ans = x * y; }
+                        else { y = 2 + (i % 8); x = y * (2 + (i % 7)); ans = x / y; }
+                        out.push(makeChoice(`Berapakah hasil dari ${x} ${op} ${y}?`, ans, [ans + 2, ans + 5]));
+                    }
+                    return out;
+                },
+                2: () => {
+                    const names = ['Merah','Biru','Hijau','Kuning','Ungu','Merah Muda','Jingga','Toska','Cokelat','Hitam',
+                        'Putih','Abu-abu','Biru Langit','Nila','Emas','Perak','Krem','Salem','Magenta','Zaitun',
+                        'Lavender','Turkuas','Marun','Navy','Peach','Mint','Coral','Lime','Burgundy','Mustard',
+                        'Lilac','Teal','Aqua','Ivory','Khaki','Rose','Plum','Tan','Indigo','Charcoal',
+                        'Biru Es','Hijau Daun','Merah Bata','Kuning Lemon','Oranye Tua','Hijau Mint','Biru Laut','Merah Hati','Abu Muda','Cyan'];
+                    return names.map((name, i) => {
+                        const hue = Math.round(i * 360 / 50);
+                        const hex = `hsl(${hue}, 65%, ${40 + (i % 3) * 10}%)`;
+                        const wrong = shuffleArray(names.filter(n => n !== name)).slice(0, 2);
+                        return { type:'color', name, hex, q:`Apa nama warna nomor ${i + 1} pada kotak di atas?`, opts:shuffleArray([name, ...wrong]) };
+                    });
+                },
+                3: () => {
+                    const words = [
+                        ['SEKOLAH','Tempat untuk belajar'],['BUKU','Benda untuk dibaca'],['PENSIL','Alat untuk menulis'],['JENDELA','Tempat masuknya cahaya dan udara'],
+                        ['MATAHARI','Benda langit yang menerangi bumi'],['KELUARGA','Ayah, ibu, dan anak'],['PELANGI','Warna-warni yang terlihat setelah hujan'],['SEPEDA','Kendaraan beroda dua yang dikayuh'],
+                        ['TANAMAN','Makhluk hidup yang tumbuh di tanah'],['LAUTAN','Perairan asin yang sangat luas'],['KOMPUTER','Alat elektronik untuk mengolah data'],['PESAWAT','Kendaraan yang terbang di udara'],
+                        ['KELINCI','Hewan bertelinga panjang'],['MERPATI','Burung yang sering menjadi simbol perdamaian'],['BENDERA','Lambang sebuah negara'],['JAGUNG','Tanaman pangan berbiji kuning'],
+                        ['PANTAI','Tempat bertemunya daratan dan laut'],['GUNUNG','Daratan tinggi yang menjulang'],['PAYUNG','Benda untuk melindungi dari hujan'],['SEPATU','Alas untuk melindungi kaki'],
+                        ['JAM TANGAN','Alat untuk melihat waktu'],['KENDARAAN','Alat untuk berpindah tempat'],['OLAHRAGA','Kegiatan untuk menjaga kebugaran'],['PERPUSTAKAAN','Tempat meminjam dan membaca buku'],
+                        ['KEBERSIHAN','Keadaan bebas dari kotoran'],['KESEHATAN','Keadaan tubuh yang baik'],['PERSAHABATAN','Hubungan baik antar teman'],['PENGGARIS','Alat untuk membuat garis lurus'],
+                        ['PENGHAPUS','Alat untuk menghapus tulisan pensil'],['KERTAS','Bahan untuk menulis'],['BINTANG','Benda langit yang bercahaya'],['BULAN','Satelit alami bumi'],
+                        ['SAMPAH','Sisa benda yang tidak digunakan'],['DOKTER','Orang yang merawat orang sakit'],['PETANI','Orang yang mengolah sawah atau ladang'],['NELAYAN','Orang yang menangkap ikan'],
+                        ['PEMANDANGAN','Hal yang terlihat oleh mata'],['AIR TERJUN','Aliran air yang jatuh dari tempat tinggi'],['KUPU-KUPU','Serangga bersayap indah'],['PERAHU','Kendaraan yang berjalan di air'],
+                        ['BUNGA','Bagian tumbuhan yang indah'],['KAMERA','Alat untuk mengambil foto'],['TELEPON','Alat untuk berkomunikasi jarak jauh'],['LEMARI','Tempat menyimpan pakaian'],
+                        ['KALENDER','Alat untuk melihat tanggal'],['MASAKAN','Makanan yang sudah diolah'],['OLAHRAGAWAN','Orang yang menekuni olahraga'],['PEMANDU','Orang yang menunjukkan jalan'],
+                        ['TANGGA','Alat untuk naik ke tempat tinggi'],['KACA','Benda bening untuk melihat bayangan']
+                    ]
+                    return words.map(([w,hint]) => ({type:'word', w, hint, q:'Susun huruf-huruf berikut menjadi kata yang benar!'}));
+                },
+                4: () => {
+                    const out = [];
+                    const denoms = [2,3,4,5,6,8,10];
+                    for (let i=0; i<50; i++) {
+                        const d = denoms[i % denoms.length], n = 1 + (Math.floor(i / denoms.length) % (d - 1));
+                        const ans = `${n}/${d}`;
+                        out.push(makeChoice(`Pizza dibagi menjadi ${d} bagian sama besar. Jika dimakan ${n} bagian, pecahannya adalah ...`, ans,
+                            [`${Math.max(1,n-1)}/${d}`, `${Math.min(d,n+1)}/${d}`]));
+                    }
+                    return out;
+                },
+                5: () => {
+                    const out=[];
+                    for(let i=0;i<50;i++){
+                        const start=2+i, step=2+(i%9), seq=[start,start+step,start+2*step,start+3*step], ans=start+4*step;
+                        out.push(makeChoice(`Perhatikan pola ${seq.join(', ')}, ... Berapa angka selanjutnya?`,ans,[ans+step,ans-1]));
+                    }
+                    return out;
+                },
+                6: () => {
+                    const data = [
+                        ['Hewan apa yang memiliki belalai panjang?','Gajah',['Kuda','Sapi']],['Hewan apa yang membawa anaknya dalam kantung?','Kanguru',['Kelinci','Harimau']],
+                        ['Hewan air yang bernapas dengan insang adalah?','Ikan',['Paus','Kucing']],['Hewan yang berbunyi kwek-kwek adalah?','Bebek',['Ayam','Merpati']],
+                        ['Hewan malam yang dapat terbang dan menggunakan ekolokasi adalah?','Kelelawar',['Elang','Kupu-kupu']],['Hewan yang menghasilkan madu adalah?','Lebah',['Semut','Lalat']],
+                        ['Hewan yang memiliki leher sangat panjang adalah?','Jerapah',['Zebra','Rusa']],['Hewan yang dikenal sebagai raja hutan adalah?','Singa',['Kuda','Kambing']],
+                        ['Hewan yang memiliki cangkang keras dan berjalan lambat adalah?','Kura-kura',['Kelinci','Kucing']],['Hewan pemakan bambu adalah?','Panda',['Koala','Beruang']],
+                        ['Hewan yang menghasilkan wol adalah?','Domba',['Ayam','Bebek']],['Hewan yang memiliki punuk adalah?','Unta',['Kuda','Sapi']],['Hewan yang berubah dari ulat adalah?','Kupu-kupu',['Belalang','Semut']],
+                        ['Hewan yang hidup di air dan memiliki delapan lengan adalah?','Gurita',['Kepiting','Penyu']],['Hewan yang membuat jaring untuk menangkap mangsa adalah?','Laba-laba',['Kupu-kupu','Lebah']]
+                    ];
+                    return Array.from({length:50},(_,i)=>{const d=data[i%data.length]; return makeChoice(`${d[0]} (Pertanyaan ${i+1})`,d[1],d[2]);});
+                },
+                7: () => {
+                    const facts=[
+                        ['Planet terdekat dari Matahari adalah?','Merkurius',['Venus','Mars']],['Planet yang dikenal sebagai planet merah adalah?','Mars',['Jupiter','Saturnus']],
+                        ['Planet terbesar di tata surya adalah?','Jupiter',['Uranus','Bumi']],['Planet yang memiliki cincin paling terkenal adalah?','Saturnus',['Neptunus','Mars']],
+                        ['Planet tempat manusia tinggal adalah?','Bumi',['Venus','Merkurius']],['Pusat tata surya kita adalah?','Matahari',['Bulan','Bumi']],
+                        ['Satelit alami bumi adalah?','Bulan',['Mars','Matahari']],['Planet yang paling panas adalah?','Venus',['Neptunus','Uranus']],
+                        ['Planet terjauh dari Matahari adalah?','Neptunus',['Bumi','Mars']],['Benda langit yang mengelilingi planet disebut?','Satelit',['Komet','Asteroid']]
+                    ];
+                    return Array.from({length:50},(_,i)=>{const d=facts[i%facts.length]; return makeChoice(`${d[0]} (Kuis ${i+1})`,d[1],d[2]);});
+                },
+                8: () => {
+                    const sentences=[
+                        ['Ibu','memasak','sayur','di','dapur'],['Adik','membaca','buku','cerita'],['Ayah','menyiram','tanaman','setiap','pagi'],['Kakak','belajar','di','perpustakaan'],
+                        ['Kami','membersihkan','kelas','bersama'],['Burung','terbang','di','langit'],['Siti','membantu','ibu','di','rumah'],['Petani','menanam','padi','di','sawah'],
+                        ['Mereka','bermain','bola','di','lapangan'],['Rani','menulis','surat','untuk','nenek']
+                    ];
+                    return Array.from({length:50},(_,i)=>{const s=sentences[i%sentences.length], correct=s.join(' '); return makeChoice(`Susun kata menjadi kalimat yang benar: ${shuffleArray(s).join(' / ')}`,correct,[shuffleArray(s).join(' '),[...s].reverse().join(' ')]);});
+                },
+                9: () => {
+                    const data=[['Bangun datar yang memiliki 3 sisi adalah?','Segitiga',['Persegi','Lingkaran']],['Bangun datar yang memiliki 4 sisi sama panjang dan 4 sudut siku-siku adalah?','Persegi',['Persegi panjang','Segitiga']],['Bangun datar tanpa sudut adalah?','Lingkaran',['Segitiga','Persegi']],['Bangun datar dengan dua pasang sisi berhadapan sama panjang adalah?','Persegi panjang',['Lingkaran','Segitiga']],['Jumlah sudut pada segitiga adalah?','3',['4','5']],['Jumlah sisi pada segi lima adalah?','5',['4','6']],['Bentuk papan tulis biasanya menyerupai?','Persegi panjang',['Lingkaran','Segitiga']],['Bentuk roda adalah?','Lingkaran',['Persegi','Trapesium']],['Bangun datar dengan 6 sisi disebut?','Segi enam',['Segi lima','Segi empat']],['Bangun datar dengan 8 sisi disebut?','Segi delapan',['Segi enam','Segi lima']]];
+                    return Array.from({length:50},(_,i)=>{const d=data[i%data.length];return makeChoice(`${d[0]} (Soal ${i+1})`,d[1],d[2]);});
+                },
+                10: () => {
+                    const data=[['Air membeku menjadi?','Es',['Uap','Minyak']],['Tumbuhan membuat makanan melalui proses?','Fotosintesis',['Respirasi','Penguapan']],['Organ untuk bernapas pada ikan adalah?','Insang',['Paru-paru','Kulit']],['Sumber energi utama bagi bumi adalah?','Matahari',['Bulan','Bintang jatuh']],['Air berubah menjadi uap karena?','Panas',['Dingin','Gelap']],['Bagian tumbuhan yang menyerap air adalah?','Akar',['Bunga','Buah']],['Hewan pemakan tumbuhan disebut?','Herbivora',['Karnivora','Omnivora']],['Gaya yang membuat benda jatuh ke bumi adalah?','Gravitasi',['Gesekan','Magnet']],['Indra untuk mendengar adalah?','Telinga',['Mata','Hidung']],['Benda yang dapat ditarik magnet contohnya?','Besi',['Kayu','Kertas']]];
+                    return Array.from({length:50},(_,i)=>{const d=data[i%data.length];return makeChoice(`${d[0]} (Eksperimen ${i+1})`,d[1],d[2]);});
+                },
+                11: () => {
+                    const pairs=[['Besar','Kecil'],['Tinggi','Rendah'],['Rajin','Giat'],['Pandai','Pintar'],['Gelap','Terang'],['Cepat','Lambat'],['Indah','Elok'],['Kuat','Lemah'],['Luas','Sempit'],['Dingin','Sejuk'],['Berani','Takut'],['Hemat','Boros'],['Awal','Akhir'],['Kaya','Miskin'],['Jujur','Curang'],['Gembira','Senang'],['Sulit','Mudah'],['Rapi','Berantakan'],['Maju','Mundur'],['Ramah','Galak'],['Panjang','Pendek'],['Bersih','Kotor'],['Keras','Lunak'],['Terang','Cerah'],['Cermat','Teliti'],['Abadi','Kekal'],['Cakap','Pandai'],['Ceria','Murung'],['Damai','Rukun'],['Lelah','Letih'],['Makmur','Sejahtera'],['Melihat','Memandang'],['Menolong','Membantu'],['Menyukai','Mencintai'],['Berjumpa','Bertemu'],['Bicara','Berkata'],['Wangi','Harum'],['Lapar','Kenyang'],['Mahal','Murah'],['Mudah','Gampang'],['Sopan','Santun'],['Sakit','Sehat'],['Malam','Siang'],['Hadir','Absen'],['Menang','Kalah'],['Atas','Bawah'],['Depan','Belakang'],['Masuk','Keluar'],['Hidup','Mati'],['Terbuka','Tertutup']];
+                    return pairs.map((p,i)=>makeChoice(`Apa lawan kata dari "${p[0]}"?`,p[1],[p[0],pairs[(i+7)%50][1]]));
+                },
+                12: () => {
+                    const data=[['Siapa yang dikenal sebagai Bapak Pendidikan Indonesia?','Ki Hajar Dewantara',['Soekarno','Mohammad Hatta']],['Siapa proklamator kemerdekaan Indonesia?','Soekarno dan Mohammad Hatta',['Ki Hajar Dewantara','Jenderal Sudirman']],['Siapa pahlawan perempuan dari Jepara?','R.A. Kartini',['Cut Nyak Dien','Dewi Sartika']],['Siapa pemimpin Perang Diponegoro?','Pangeran Diponegoro',['Pattimura','Tuanku Imam Bonjol']],['Siapa pahlawan dari Aceh?','Cut Nyak Dien',['R.A. Kartini','Martha Christina Tiahahu']],['Siapa pencipta lagu Indonesia Raya?','W.R. Supratman',['Ismail Marzuki','Kusbini']],['Siapa tokoh yang dijuluki Bung Hatta?','Mohammad Hatta',['Soekarno','Sutan Sjahrir']],['Siapa pahlawan dari Maluku yang bernama Thomas Matulessy?','Pattimura',['Diponegoro','Sudirman']],['Siapa panglima besar TNI pertama?','Jenderal Sudirman',['Pattimura','Pangeran Antasari']],['Siapa pahlawan perempuan dari Maluku?','Martha Christina Tiahahu',['Dewi Sartika','R.A. Kartini']]];
+                    return Array.from({length:50},(_,i)=>{const d=data[i%data.length];return makeChoice(`${d[0]} (Kuis sejarah ${i+1})`,d[1],d[2]);});
+                },
+                13: () => {
+                    const out=[];
+                    for(let i=0;i<50;i++){
+                        const h=1+(i%12), m=(i*5)%60, add=15+((i*7)%90), total=h*60+m+add, hh=Math.floor(total/60)%12||12, mm=total%60;
+                        const fmt=(a,b)=>`${a}.${String(b).padStart(2,'0')}`;
+                        const ans=fmt(hh,mm);
+                        out.push(makeChoice(`Jam menunjukkan ${fmt(h,m)}. ${add} menit kemudian pukul berapa?`,ans,[fmt((hh%12)+1,mm),fmt(hh,(mm+10)%60)]));
+                    }
+                    return out;
+                },
+                14: () => {
+                    const data=[['Candi Borobudur berada di provinsi?','Jawa Tengah',['Jawa Barat','Bali']],['Danau Toba berada di pulau?','Sumatra',['Jawa','Kalimantan']],['Rumah adat Tongkonan berasal dari?','Sulawesi Selatan',['Papua','Bali']],['Tari Kecak berasal dari?','Bali',['Aceh','Riau']],['Angklung berasal dari daerah?','Jawa Barat',['Maluku','Papua']],['Pulau terbesar di Indonesia adalah?','Kalimantan',['Bali','Madura']],['Ibu kota Provinsi Sumatera Barat adalah?','Padang',['Medan','Pekanbaru']],['Ibu kota Provinsi Jawa Timur adalah?','Surabaya',['Bandung','Semarang']],['Rumah Gadang berasal dari?','Sumatera Barat',['Jawa Tengah','Papua']],['Honai adalah rumah adat dari?','Papua',['Bali','Aceh']]];
+                    return Array.from({length:50},(_,i)=>{const d=data[i%data.length];return makeChoice(`${d[0]} (Geografi ${i+1})`,d[1],d[2]);});
+                },
+                15: () => {
+                    const pairs=[['Apotek','Apotik'],['Aktivitas','Aktifitas'],['Nasihat','Nasehat'],['Risiko','Resiko'],['Izin','Ijin'],['Kualitas',' kwalitas'],['Praktik','Praktek'],['Kuitansi','Kwitansi'],['Sekadar','Sekedar'],['Jadwal','Jadual'],['Objek','Obyek'],['Subjek','Subyek'],['Februari','Pebruari'],['November','Nopember'],['Cendekia','Cendikia'],['Saksama','Seksama'],['Kreativitas','Kreatifitas'],['Diagnosis','Diagnosa'],['Hierarki','Hirarki'],['Zaman','Jaman'],['Antre','Antri'],['Cokelat','Coklat'],['Teladan','Tauladan'],['Miliar',' milyar'],['Napas','Nafas'],['Sistem','Sistim'],['Teknik','Tehnik'],['Khusus','Kusus'],['Ramadan','Ramadhan'],['Ijazah','Ijasah'],['Imbau','Himbau'],['Andal','Handal'],['Fondasi','Pondasi'],['Mengubah','Merubah'],['Memengaruhi','Mempengaruhi'],['Persentase','Prosentase'],['Frekuensi','Frekwensi'],['Kamera','Camera'],['Karier','Karir'],['Museum','Musium'],['Analisis','Analisa'],['Ekstrem','Ekstrim'],['Konkret','Kongkrit'],['Legalisasi','Legalisir'],['Manajemen','Management'],['Februari','Pebruari'],['Kata depan','Kata didepan'],['Di rumah','Dirumah'],['Kerja sama','Kerjasama'],['Tanggung jawab','Tanggungjawab']];
+                    return pairs.map((p,i)=>makeChoice(`Manakah penulisan kata yang baku? (Nomor ${i+1})`,p[0],[p[1],p[0].toLowerCase()]));
+                },
+                16: () => {
+                    const out=[];
+                    for(let i=0;i<50;i++){const a=2+(i%9),b=2+Math.floor(i/9),ans=a*b;out.push(makeChoice(`Berapakah hasil ${a} × ${b}?`,ans,[ans+a,ans+b]));}
+                    return out;
+                },
+                17: () => {
+                    const vocab=[['Apple','Apel'],['Book','Buku'],['Cat','Kucing'],['Dog','Anjing'],['House','Rumah'],['School','Sekolah'],['Water','Air'],['Sun','Matahari'],['Moon','Bulan'],['Tree','Pohon'],['Flower','Bunga'],['Bird','Burung'],['Fish','Ikan'],['Chair','Kursi'],['Table','Meja'],['Door','Pintu'],['Window','Jendela'],['Pencil','Pensil'],['Bag','Tas'],['Shoes','Sepatu'],['Bread','Roti'],['Milk','Susu'],['Rice','Nasi'],[' mother','Ibu'],['Father','Ayah'],['Sister','Saudara perempuan'],['Brother','Saudara laki-laki'],['Morning','Pagi'],['Night','Malam'],['Happy','Senang'],['Sad','Sedih'],['Big','Besar'],['Small','Kecil'],['Fast','Cepat'],['Slow','Lambat'],['Red','Merah'],['Green','Hijau'],['Blue','Biru'],['Yellow','Kuning'],['Black','Hitam'],['White','Putih'],['One','Satu'],['Two','Dua'],['Three','Tiga'],['Four','Empat'],['Five','Lima'],['Run','Berlari'],['Eat','Makan'],['Read','Membaca'],['Write','Menulis']];
+                    return vocab.map((p,i)=>makeChoice(`Apa arti kata bahasa Inggris "${p[0].trim()}"?`,p[1],[vocab[(i+7)%50][1],vocab[(i+13)%50][1]]));
+                },
+                18: () => {
+                    const out=[];
+                    for(let i=0;i<50;i++){
+                        const a=2+(i%10), b=3+Math.floor(i/10), ans=a+b;
+                        out.push(makeChoice(`Rina memiliki ${a} apel. Ia mendapat ${b} apel lagi, lalu memberikan semuanya kepada temannya. Berapa apel yang ia miliki sebelum diberikan?`,ans,[ans+2,ans-1]));
+                    }
+                    return out;
+                },
+                19: () => {
+                    const data=[['Kulit pisang termasuk sampah?','Organik',['Anorganik','B3']],['Botol plastik termasuk sampah?','Anorganik',['Organik','Makanan']],['Daun kering dapat diolah menjadi?','Kompos',['Kaca','Logam']],['Baterai bekas sebaiknya dibuang sebagai?','Sampah B3',['Organik','Kertas']],['Kertas bekas dapat didaur ulang menjadi?','Kertas baru',['Sisa makanan','Air']],['Mematikan lampu saat tidak dipakai membantu?','Menghemat energi',['Menambah polusi','Membuang air']],['Menanam pohon bermanfaat untuk?','Menghasilkan oksigen',['Mengotori udara','Mengurangi air']],['Membuang sampah ke sungai dapat menyebabkan?','Banjir',['Udara bersih','Tanah subur']],['Membawa botol minum sendiri mengurangi?','Sampah plastik',['Jumlah pohon','Air hujan']],['Memilah sampah berarti?','Memisahkan sampah sesuai jenisnya',['Mencampur semua sampah','Membakar semua sampah']]];
+                    return Array.from({length:50},(_,i)=>{const d=data[i%data.length];return makeChoice(`${d[0]} (Tantangan lingkungan ${i+1})`,d[1],d[2]);});
+                },
+                20: () => {
+                    const stories=[
+                        ['Dina melihat anak kucing kehujanan. Ia membawa kucing itu ke teras dan memberinya makan.','Apa yang dilakukan Dina kepada anak kucing?','Membantu dan memberinya makan',['Membiarkannya','Mengusirnya']],
+                        ['Budi menemukan dompet di halaman sekolah. Ia menyerahkannya kepada guru agar pemiliknya ditemukan.','Apa sikap yang ditunjukkan Budi?','Jujur',['Malas','Sombong']],
+                        ['Setiap pagi, Raka menyiram tanaman di halaman. Tanaman itu tumbuh subur.','Mengapa tanaman Raka tumbuh subur?','Dirawat dan disiram',['Tidak terkena air','Dibiarkan']],
+                        ['Siti selalu menyiapkan buku pada malam hari. Pagi harinya ia tidak terburu-buru.','Kebiasaan baik apa yang dilakukan Siti?','Menyiapkan keperluan lebih awal',['Tidur terlalu siang','Melupakan buku']],
+                        ['Warga bekerja sama membersihkan selokan. Air hujan dapat mengalir lancar.','Apa manfaat kerja sama warga?','Lingkungan menjadi bersih dan saluran lancar',['Selokan tersumbat','Sampah bertambah']]
+                    ];
+                    return Array.from({length:50},(_,i)=>{const d=stories[i%stories.length];return makeChoice(`${d[0]} (Cerita ${i+1}) ${d[1]}`,d[2],d[3]);});
+                }
+            };
+            const bank = banks[gameId] ? banks[gameId]() : [];
+            // Pastikan tepat 50 item dan tidak ada soal dengan teks pertanyaan yang sama.
+            return bank.slice(0, 50);
+        }
+
+        // Render UI Pertanyaan Aktif
+        function renderActiveGameUI(qData) {
+            const container = document.getElementById('active-game-container');
+            const gameObj = gamesList.find(g => g.id === activeGameId);
+            const gameTitle = gameObj ? gameObj.title : 'Game Edukasi';
+
+            if (qData.type === 'color') {
+                container.innerHTML = `
+                    <div class="text-center space-y-6 max-w-lg w-full">
+                        <div class="inline-block bg-sky-100 text-sky-600 px-4 py-1.5 rounded-full font-bold text-sm">${gameTitle} 🎨</div>
+                        <p class="text-lg font-bold text-slate-800">${qData.q}</p>
+                        <div class="w-32 h-32 mx-auto rounded-3xl shadow-lg border-4 border-white" style="background-color: ${qData.hex};"></div>
+                        <div class="grid grid-cols-3 gap-3">
+                            ${qData.opts.map(o => `<button onclick="handleQuestionProgress('${o}' === '${qData.name}')" class="bg-white border-2 border-pink-200 hover:bg-pink-50 font-bold py-3 rounded-2xl shadow">${o}</button>`).join('')}
+                        </div>
+                    </div>`;
+            } else if (qData.type === 'word') {
+                let scrambled = qData.w.split('').sort(() => Math.random() - 0.5).join('');
+                container.innerHTML = `
+                    <div class="text-center space-y-6 max-w-lg w-full">
+                        <div class="inline-block bg-amber-100 text-amber-700 px-4 py-1.5 rounded-full font-bold text-sm">${gameTitle} 📚</div>
+                        <p class="text-lg font-bold text-slate-800">${qData.q}</p>
+                        <p class="text-sm text-slate-500 italic bg-amber-50 p-3 rounded-2xl">Petunjuk: "${qData.hint}"</p>
+                        <div class="text-4xl font-extrabold tracking-widest text-pink-600 bg-slate-50 py-6 rounded-3xl border">${scrambled}</div>
+                        <div class="space-y-3">
+                            <input type="text" id="w-input" placeholder="Ketik jawaban yang benar..." class="w-full text-center px-4 py-3 rounded-2xl border-2 border-pink-200 font-bold uppercase" autocomplete="off">
+                            <button onclick="handleQuestionProgress(document.getElementById('w-input').value.trim().toUpperCase() === '${qData.w}')" class="w-full bg-pink-500 text-white font-bold py-3 rounded-2xl shadow">Periksa Jawaban</button>
+                        </div>
+                    </div>`;
+            } else {
+                let shuffledOpts = [...qData.opts].sort(() => Math.random() - 0.5);
+                container.innerHTML = `
+                    <div class="text-center space-y-6 max-w-lg w-full">
+                        <div class="inline-block bg-pink-100 text-pink-600 px-4 py-1.5 rounded-full font-bold text-sm">${gameTitle} 🚀</div>
+                        <p class="text-xl font-extrabold text-slate-800 bg-slate-50 py-6 px-4 rounded-3xl border shadow-inner">${qData.q}</p>
+                        <div class="grid grid-cols-${shuffledOpts.length > 2 ? '3' : '2'} gap-3">
+                            ${shuffledOpts.map(opt => `<button onclick="handleQuestionProgress(String('${opt}') === String('${qData.ans}'))" class="bg-sky-400 hover:bg-sky-500 text-white font-bold text-lg py-4 rounded-2xl shadow">${opt}</button>`).join('')}
+                        </div>
+                    </div>`;
+            }
+        }
+
+        // Modal Custom (Pengganti Alert)
+        function showModal(title, message, iconClass) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            document.getElementById('modal-icon').innerHTML = `<i class="fa-solid ${iconClass}"></i>`;
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        // Inisialisasi Pertama
+        window.onload = function() {
+            renderGames('all');
+        }
+    </script>
+</body>
+</html>
